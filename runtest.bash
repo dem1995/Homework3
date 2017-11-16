@@ -2,8 +2,7 @@
 ##	Usage:	runtest.bash	./code	experiment`date	+%Y%m%d%M`.csv
 EXE=$1
 CSVFILE=$2
-Bash
-BashCORES=$(grep	-c	'^processor'	/proc/cpuinfo)
+CORES=$(grep	-c	'^processor'	/proc/cpuinfo)
 for	threads	in	2	4	8	16
 do
 for	loops	in	20000000	40000000	80000000	160000000
