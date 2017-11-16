@@ -57,7 +57,7 @@ threadFunc(void *arg)
 int
 main(int argc, char *argv[])
 {
-	pthread_t t1[(int)argv[2]];
+	pthread_t t1[atoi(argv[2])];
 	int loops, s, threads;
 
 	loops = (argc > 1) ? getInt(argv[1], GN_GT_0, "num-loops") : 10000000;
