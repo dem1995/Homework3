@@ -21,14 +21,6 @@ See also thread_incr.c and thread_incr_mutex.c.
 #include <pthread.h>
 #include "tlpi_hdr.h"
 
-#ifndef sem_t
-#define sem_t char
-#endif
-#ifndef pthread_t
-#define pthread_t char
-#endif
-
-
 static int glob = 0;
 static sem_t sem;
 
@@ -57,12 +49,13 @@ threadFunc(void *arg)
 int
 main(int argc, char *argv[])
 {
-	pthread_t threads[atoi(argv[2])];
 	int loops, s, threads;
 
 	loops = (argc > 1) ? getInt(argv[1], GN_GT_0, "num-loops") : 10000000;
 	threads = (argc > 1) ? getInt(argv[2], GN_GT_0, "N") : 10000000;
 
+
+	pthread_t threadArray[threads];
 	/* Initialize a semaphore with the value 1 */
 
 	if (sem_init(&sem, 0, 1) == -1)
@@ -70,13 +63,13 @@ main(int argc, char *argv[])
 
 	/* Create two threads that increment 'glob' */
 	for (int i = 0; i < threads; i++) {
-		s = pthread_create(&threads[i], NULL, threadFunc, &loops);
+		s = pthread_create(&threadArray[i], NULL, threadFunc, &loops);
 		if (s != 0)
 			errExitEN(s, "pthread_create");
 	}
 
 	for (int i = 0; i < threads; i++) {
-		s = pthread_join(threads[i], NULL);
+		s = pthread_join(threadArray[i], NULL);
 		if (s != 0)
 			errExitEN(s, "pthread_join");
 	}
